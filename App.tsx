@@ -1,5 +1,5 @@
-import React from 'react';
-import {ActivityIndicator} from 'react-native';
+import React, {useMemo} from 'react';
+import {ActivityIndicator, useColorScheme} from 'react-native';
 import {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -8,6 +8,7 @@ import {auth} from './src/repositories/firebase';
 import {AuthContext} from './src/context/AuthContext';
 import Login from './src/modules/auth/login/Login';
 import HomePage from './src/modules/home/homePage/HomePage';
+import {Theme, getTheme, toggleTheme} from './src/utils/themeUtils';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -22,6 +23,24 @@ const Drawer = createDrawerNavigator<RootDrawerParamList>();
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const systemColorScheme = useColorScheme();
+  const [theme, setTheme] = useState<Theme>('light');
+
+  useEffect(() => {
+    const loadTheme = async () => {
+      const initialTheme = await getTheme(systemColorScheme || 'light');
+      setTheme(initialTheme);
+    };
+    loadTheme();
+  }, [systemColorScheme]);
+
+  const value = useMemo(
+    () => ({
+      theme,
+      toggleTheme: () => toggleTheme(theme, setTheme),
+    }),
+    [theme],
+  );
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, authUser => {
@@ -44,7 +63,7 @@ const App = () => {
   // return <Login />;
 
   return (
-    <AuthContext.Provider value={{user}}>
+    <AuthContext.Provider value={{user, themeContext: value}}>
       <NavigationContainer>
         {user ? (
           <Drawer.Navigator initialRouteName="Home">
