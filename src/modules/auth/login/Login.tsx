@@ -29,7 +29,6 @@ const Login = () => {
         .catch(error => {
           console.log('error', error);
         });
-      // navigation.navigate('Home' as never);
     } catch (error) {
       Alert.alert('Error en el inicio de sesión');
     } finally {

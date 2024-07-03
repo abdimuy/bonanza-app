@@ -4,7 +4,7 @@ import {useThemedStyles} from '../../hooks/useThemeStyles';
 import {darkTextStyles, lightTextStyles} from './text.styles';
 
 interface TextProps {
-  children?: string;
+  children?: string | string[];
   size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
   weight?:
     | 'normal'

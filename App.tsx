@@ -10,10 +10,12 @@ import Login from './src/modules/auth/login/Login';
 import HomePage from './src/modules/home/homePage/HomePage';
 import {Theme, getTheme, toggleTheme} from './src/utils/themeUtils';
 import useGetUser from './src/hooks/useGetUser';
+import SalesByRuta from './src/modules/sales/salesByRuta/SalesByRuta';
+import useGetRuta from './src/hooks/useGetRutas';
 
 export type RootDrawerParamList = {
   Home: undefined;
-  // Sales: undefined;
+  Sales: undefined;
   // DailyReport: undefined;
   // WeeklyReport: undefined;
   Login: undefined;
@@ -48,6 +50,8 @@ const App = () => {
     [theme],
   );
 
+  const {ruta, loading: loadingRuta} = useGetRuta(userData);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, authUser => {
       if (authUser) {
@@ -68,7 +72,8 @@ const App = () => {
   }
 
   return (
-    <AuthContext.Provider value={{user, themeContext: value, userData}}>
+    <AuthContext.Provider
+      value={{user, themeContext: value, userData, ruta, loadingRuta}}>
       <NavigationContainer>
         {user ? (
           <Drawer.Navigator
@@ -78,6 +83,7 @@ const App = () => {
             }}
             initialRouteName="Home">
             <Drawer.Screen name="Home" component={HomePage} />
+            <Drawer.Screen name="Sales" component={SalesByRuta} />
           </Drawer.Navigator>
         ) : (
           <Drawer.Navigator
