@@ -1,5 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {PRIMARY_BLACK_COLOR} from '../../contants/colors';
+import {
+  PRIMARY_BLACK_COLOR,
+  PRIMARY_BLACK_TEXT_COLOR,
+  SECONDARY_LIGHT_TEXT_COLOR,
+} from '../../constants/colors';
 
 export const lightButtonStyles = StyleSheet.create({
   button: {
@@ -12,7 +16,7 @@ export const lightButtonStyles = StyleSheet.create({
     flexShrink: 1,
   },
   buttonText: {
-    color: 'black',
+    color: SECONDARY_LIGHT_TEXT_COLOR,
     fontSize: 20,
     textAlign: 'center',
   },
@@ -29,7 +33,7 @@ export const darkButtonStyles = StyleSheet.create({
     flexShrink: 1,
   },
   buttonText: {
-    color: 'white',
+    color: PRIMARY_BLACK_TEXT_COLOR,
     fontSize: 20,
     textAlign: 'center',
   },

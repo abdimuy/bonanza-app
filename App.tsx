@@ -9,6 +9,7 @@ import {AuthContext} from './src/context/AuthContext';
 import Login from './src/modules/auth/login/Login';
 import HomePage from './src/modules/home/homePage/HomePage';
 import {Theme, getTheme, toggleTheme} from './src/utils/themeUtils';
+import useGetUser from './src/hooks/useGetUser';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -21,10 +22,15 @@ export type RootDrawerParamList = {
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 const App = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
   const systemColorScheme = useColorScheme();
   const [theme, setTheme] = useState<Theme>('light');
+
+  const {loading: LoadingUser, user: userData} = useGetUser(
+    user?.email || '',
+    user,
+  );
 
   useEffect(() => {
     const loadTheme = async () => {
@@ -47,7 +53,7 @@ const App = () => {
       if (authUser) {
         setUser(authUser);
       } else {
-        setUser(null);
+        setUser(undefined);
       }
       setLoading(false);
     });
@@ -58,19 +64,28 @@ const App = () => {
   }, [user]);
 
   if (loading) {
-    // return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size="large" color="#0000ff" />;
   }
-  // return <Login />;
 
   return (
-    <AuthContext.Provider value={{user, themeContext: value}}>
+    <AuthContext.Provider value={{user, themeContext: value, userData}}>
       <NavigationContainer>
         {user ? (
-          <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Navigator
+            screenOptions={{
+              drawerType: 'slide',
+              headerShown: false,
+            }}
+            initialRouteName="Home">
             <Drawer.Screen name="Home" component={HomePage} />
           </Drawer.Navigator>
         ) : (
-          <Drawer.Navigator initialRouteName="Login">
+          <Drawer.Navigator
+            screenOptions={{
+              drawerType: 'slide',
+              headerShown: false,
+            }}
+            initialRouteName="Login">
             <Drawer.Screen name="Login" component={Login} />
           </Drawer.Navigator>
         )}
