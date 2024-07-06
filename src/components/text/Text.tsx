@@ -1,10 +1,10 @@
 import {Text as TextRN, ViewStyle} from 'react-native';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {useThemedStyles} from '../../hooks/useThemeStyles';
 import {darkTextStyles, lightTextStyles} from './text.styles';
 
 interface TextProps {
-  children?: string | string[];
+  children?: ReactNode;
   size?: 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
   weight?:
     | 'normal'
@@ -13,9 +13,10 @@ interface TextProps {
     | 'extra-bold'
     | 'extra-light'
     | 'semi-bold';
-  color?: 'primary' | 'secondary';
+  color?: 'primary' | 'secondary' | 'tertiary';
   style?: ViewStyle;
   align?: 'center' | 'left' | 'right';
+  numberOfLines?: number;
 }
 
 const Text = (props: TextProps) => {
@@ -26,15 +27,22 @@ const Text = (props: TextProps) => {
     color = 'primary',
     style = {},
     align = 'left',
+    numberOfLines,
   } = props;
   const styles = useThemedStyles({
     darkThemeStyles: darkTextStyles,
     lightThemeStyles: lightTextStyles,
   });
-  const stylesColor = color === 'primary' ? styles.primary : styles.secondary;
+  const stylesColor =
+    color === 'primary'
+      ? styles.primary
+      : color === 'secondary'
+      ? styles.secondary
+      : styles.tertiary;
 
   return (
     <TextRN
+      numberOfLines={numberOfLines}
       style={[
         stylesColor,
         {
@@ -62,7 +70,6 @@ const Text = (props: TextProps) => {
               : '600',
           textAlign: align,
         },
-
         style,
       ]}>
       {children}

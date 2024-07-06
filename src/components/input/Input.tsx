@@ -5,9 +5,14 @@ import {
   TextInputChangeEventData,
   ViewStyle,
 } from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import {lightInputStyles, darkInputStyles} from './input.styles';
 import {useThemedStyles} from '../../hooks/useThemeStyles';
+import {AuthContext} from '../../context/AuthContext';
+import {
+  PRIMARY_BLACK_TEXT_COLOR,
+  PRIMARY_LIGHT_TEXT_COLOR,
+} from '../../constants/colors';
 
 interface InputProps {
   value?: string;
@@ -31,6 +36,10 @@ const Input = ({
     lightThemeStyles: lightInputStyles,
   });
 
+  const {
+    themeContext: {theme},
+  } = useContext(AuthContext);
+
   return (
     <TextInput
       style={[styles.input, style]}
@@ -39,6 +48,9 @@ const Input = ({
       onChange={onChange}
       keyboardType={keyboardType}
       autoCapitalize={autocapitalize}
+      placeholderTextColor={
+        theme === 'light' ? PRIMARY_LIGHT_TEXT_COLOR : PRIMARY_BLACK_TEXT_COLOR
+      }
     />
   );
 };

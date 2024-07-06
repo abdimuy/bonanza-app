@@ -10,8 +10,8 @@ import Login from './src/modules/auth/login/Login';
 import HomePage from './src/modules/home/homePage/HomePage';
 import {Theme, getTheme, toggleTheme} from './src/utils/themeUtils';
 import useGetUser from './src/hooks/useGetUser';
-import SalesByRuta from './src/modules/sales/salesByRuta/SalesByRuta';
 import useGetRuta from './src/hooks/useGetRutas';
+import SalesRoutes from './src/routers/salesRoutes';
 
 export type RootDrawerParamList = {
   Home: undefined;
@@ -83,7 +83,7 @@ const App = () => {
             }}
             initialRouteName="Home">
             <Drawer.Screen name="Home" component={HomePage} />
-            <Drawer.Screen name="Sales" component={SalesByRuta} />
+            <Drawer.Screen name="Sales" component={SalesRoutes} />
           </Drawer.Navigator>
         ) : (
           <Drawer.Navigator

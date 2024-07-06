@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {ScrollView, View, ActivityIndicator, TextInput} from 'react-native';
 import React, {useContext} from 'react';
 import Text from '../../../components/text/Text';
 import {
@@ -7,21 +7,48 @@ import {
 } from './salesByRuta.style';
 import {useThemedStyles} from '../../../hooks/useThemeStyles';
 import {AuthContext} from '../../../context/AuthContext';
+import useGetSales from '../../../hooks/useGetSales';
+import SaleListItem from '../SaleListItem/SaleListItem';
+import Input from '../../../components/input/Input';
 
 const SalesByRuta = () => {
   const styles = useThemedStyles({
     darkThemeStyles: darkSalesByRutaStyles,
     lightThemeStyles: lightSalesByRutaStyles,
   });
-  const {userData, ruta} = useContext(AuthContext);
+  const {ruta} = useContext(AuthContext);
+
+  const {sales, loading} = useGetSales(ruta.number);
+
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
+
   return (
     <View style={styles.container}>
-      <Text size="small">Ruta:</Text>
-      <Text
-        size="large"
-        weight="bold"
-        color="primary"
-        style={{marginBottom: 16}}>{` ${ruta.number} - ${ruta.name}`}</Text>
+      <View style={styles.header}>
+        <Text size="small" color="secondary">
+          Ruta:
+        </Text>
+        <Text
+          size="large"
+          weight="bold"
+          color="secondary"
+          style={{marginBottom: 16}}>
+          {` ${ruta.number} - ${ruta.name}`}
+        </Text>
+        <Input
+          placeholder="Buscar por nombre o número de cuenta"
+          style={{marginBottom: 20}}
+        />
+      </View>
+      <ScrollView style={styles.container}>
+        <View style={styles.list}>
+          {sales.map(sale => (
+            <SaleListItem key={sale.id} sale={sale} />
+          ))}
+        </View>
+      </ScrollView>
     </View>
   );
 };

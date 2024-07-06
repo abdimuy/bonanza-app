@@ -1,6 +1,9 @@
 import {Timestamp, collection, getDocs, query, where} from 'firebase/firestore';
 import {db} from '../../../repositories/firebase';
-import {EMAIL_FIELD, USERS_COLLECTION} from '../../../constants/collections';
+import {
+  USER_EMAIL_FIELD,
+  USERS_COLLECTION,
+} from '../../../constants/collections';
 
 export interface UserData {
   id: string;
@@ -17,7 +20,7 @@ export interface UserData {
 const getUser = async (email: string): Promise<UserData> => {
   const q = query(
     collection(db, USERS_COLLECTION),
-    where(EMAIL_FIELD, '==', email),
+    where(USER_EMAIL_FIELD, '==', email),
   );
   const docSnap = await getDocs(q);
   const user = docSnap.docs.map(doc => doc.data() as UserData)[0];

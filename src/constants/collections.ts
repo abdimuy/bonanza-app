@@ -1,6 +1,7 @@
 // Collection names
 export const USERS_COLLECTION = 'User';
 export const RUTAS_COLLECTION = 'Ruta';
+export const SALES_COLLECTION = 'Sale';
 
 // Users fields
 export const USER_EMAIL_FIELD = 'email';
